@@ -1,0 +1,39 @@
+{
+    "name": "peertube-plugin-scheduler",
+    "description": "PeerTube plugin that enabled opening/closing the video submission form based on two inputed dates.",
+    "version": "0.0.1",
+    "license": "UNLICENSED",
+    "author": "bmmpgd",
+    "bugs": "https://framagit.org/framasoft/peertube/peertube-plugin-quickstart/issues",
+    "clientScripts": [
+        {
+            "script": "dist/common-client-plugin.js",
+            "scopes": [
+                "common"
+            ]
+        }
+    ],
+    "css": [
+        "assets/style.css"
+    ],
+    "engine": {
+        "peertube": ">=5.0.0"
+    },
+    "homepage": "https://github.com/bmmpgd/peertube-plugin-scheduler",
+    "keywords": [
+        "peertube",
+        "plugin"
+    ],
+    "scripts": {
+        "prepare": "npm run build",
+        "build": "node ./scripts/build.js"
+    },
+    "library": "./main.js",
+    "staticDirs": {
+        "images": "public/images"
+    },
+    "translations": {},
+    "dependencies": {
+        "esbuild": "^0.25.4"
+    }
+}
