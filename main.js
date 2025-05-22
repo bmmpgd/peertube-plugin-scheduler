@@ -60,54 +60,6 @@ async function register ({
             </script>
         `
     })
-    registerSetting({
-        name: 'publish-datetime',
-        label: 'Test Scheduled Publish Date/Time',
-        type: 'input',
-        default: '',
-        private: false,
-        descriptionHTML: `
-    <div style="margin-bottom: 10px;">
-      <input
-        type="datetime-local"
-        id="publish-datetime-picker"
-        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; background: yellow;"
-      />
-      <small style="color: #666;">Select a future date and time for publishing</small>
-      <div id="debug-info" style="font-size: 12px; color: red;"></div>
-    </div>
-    <script>
-      console.log('Script executing...');
-
-      function debugAndInit() {
-        const picker = document.getElementById('publish-datetime-picker');
-        const originalInput = document.querySelector('input[name="publish-datetime"]');
-        const debugDiv = document.getElementById('debug-info');
-
-        debugDiv.innerHTML = 'Picker found: ' + !!picker + ', Original found: ' + !!originalInput;
-
-        if (picker && originalInput) {
-          debugDiv.innerHTML += ' - Both found, initializing...';
-          picker.value = originalInput.value || '';
-
-          picker.addEventListener('change', function() {
-            originalInput.value = this.value;
-            originalInput.dispatchEvent(new Event('input', { bubbles: true }));
-            debugDiv.innerHTML += ' - Value synced: ' + this.value;
-          });
-
-          originalInput.style.display = 'none';
-        }
-      }
-
-      // Try multiple times
-      setTimeout(debugAndInit, 100);
-      setTimeout(debugAndInit, 500);
-      setTimeout(debugAndInit, 1000);
-      setTimeout(debugAndInit, 2000);
-    </script>
-  `
-    })
 
 }
 async function unregister () {
