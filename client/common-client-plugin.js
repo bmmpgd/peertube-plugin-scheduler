@@ -3,20 +3,8 @@ async function register ({ registerHook, peertubeHelpers }) {
     const settings = await peertubeHelpers.getSettings()
     const now = new Date();
 
-    const dateTime = {
-        year: now.getFullYear(),
-        month: now.getMonth() + 1, // Month is 0-indexed, so add 1
-        day: now.getDate(),
-        hours: now.getHours(),
-        minutes: now.getMinutes(),
-        seconds: now.getSeconds(),
-        milliseconds: now.getMilliseconds()
-    };
-
     const closed = async () => {
-        const { instructionsStatus } = settings
-
-        if (instructionsStatus) {
+        if (settings) {
             const { showModal } = peertubeHelpers
 
             showModal({
