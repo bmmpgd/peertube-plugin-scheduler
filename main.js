@@ -12,36 +12,25 @@ async function register ({
         default: '',
         private: false,
         descriptionHTML: `
-      <div style="margin-bottom: 10px;">
-        <input
-          type="datetime-local"
-          id="publish-datetime-picker"
-          name="publish-datetime"
-          min="${new Date().toISOString().slice(0, 16)}"
-          style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;"
-        />
-        <small style="color: #666;">Select a future date and time for publishing</small>
-        <script>
-          (function() {
-            const picker = document.getElementById('publish-datetime-picker');
-            const originalInput = document.querySelector('input[name="publish-datetime"]');
+    <small style="color: #666;">Select a future date and time for publishing</small>
+    <script>
+    console.log('restarting worked');
+      setTimeout(function() {
+        const originalInput = document.querySelector('input[name="open-time"]');
+        if (originalInput) {
+          // Create new datetime input
+          const datetimeInput = document.createElement('input');
+          datetimeInput.type = 'datetime-local';
+          datetimeInput.name = 'open-time';
+          datetimeInput.min = new Date().toISOString().slice(0, 16);
+          datetimeInput.style.cssText = 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;';
+          datetimeInput.value = originalInput.value || '';
 
-            if (originalInput && picker) {
-              picker.value = originalInput.value || '';
-
-              picker.addEventListener('change', function() {
-                const selectedDate = new Date(this.value);
-                const now = new Date();
-
-                originalInput.value = this.value;
-                originalInput.dispatchEvent(new Event('input', { bubbles: true }));
-              });
-
-              originalInput.style.display = 'none';
-            }
-          })();
-        </script>
-      </div>
+          // Replace the original input
+          originalInput.parentNode.replaceChild(datetimeInput, originalInput);
+        }
+      }, 1000);
+    </script>
     `
     })
 
