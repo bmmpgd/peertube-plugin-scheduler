@@ -1,9 +1,10 @@
 // client/commonclient-plugin.js has the client side manipulation
 async function register ({ registerHook, peertubeHelpers }) {
-    const settings = await peertubeHelpers.getSettings()
+    const settings = peertubeHelpers.getSettings()
     const now = new Date();
 
     const closed = async () => {
+        console.log(settings);
         if (settings) {
             const { showModal } = peertubeHelpers
 
