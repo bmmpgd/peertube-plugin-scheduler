@@ -68,10 +68,11 @@ async function register ({
             const { video } = params
 
             // Extract user's last name
-            const user = await peertubeHelpers.database.query(
-                'SELECT * FROM "user" WHERE id = $userId',
-                { userId: video.userId }
+            const userResult = await peertubeHelpers.database.query(
+                'SELECT * FROM "user" WHERE id = $1',
+                [video.userId]
             )
+            const user = userResult.rows[0]
 
             const lastName = user.displayName?.split(' ').pop() || 'UNKNOWN'
             const videoTitle = video.name.replace(/[^a-zA-Z0-9]/g, '-')
