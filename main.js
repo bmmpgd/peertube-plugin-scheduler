@@ -60,6 +60,46 @@ async function register ({
             </script>
         `
     })
+    // rename video to match LASTNAME_VIDEO-TITLE.extension
+    registerHook({
+        target: 'action:api.video.uploaded',
+        handler: async (params) => {
+            const { video } = params
+
+            // Extract user's last name
+            const user = await peertubeHelpers.database.query(
+                'SELECT * FROM "user" WHERE id = $userId',
+                { userId: video.userId }
+            )
+
+            const lastName = user.displayName?.split(' ').pop() || 'UNKNOWN'
+            const videoTitle = video.name.replace(/[^a-zA-Z0-9]/g, '-')
+            let originalExtension = '.mp4'
+
+            if (video.VideoFiles && video.VideoFiles.length > 0) {
+                // Extract extension from the first video file
+                const filename = video.VideoFiles[0].filename || video.VideoFiles[0].fileUrl
+                const match = filename.match(/\.([^.]+)$/)
+                if (match) {
+                    originalExtension = match[0] // includes the dot
+                }
+            } else if (video.filename) {
+                // Alternative: check video.filename directly
+                const match = video.filename.match(/\.([^.]+)$/)
+                if (match) {
+                    originalExtension = match[0]
+                }
+            }
+
+            // Update the video's internal filename with original extension
+            await video.update({
+                filename: `${lastName}_${videoTitle}${originalExtension}`
+            })
+        }
+    })
+
+    // TODO: add start/end times for the days of screening.
+    // TODO: add override input for admins to put in usernames that can submit after close.
 
 }
 async function unregister () {

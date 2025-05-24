@@ -68,6 +68,24 @@ async function register ({ registerHook, peertubeHelpers, registerVideoField }) 
   `
         }, videoFormTab);
     }
+    registerHook({
+        target: 'action:video-edit.form.updated',
+        handler: (params) => {
+            const uploadForm = document.querySelector('form[ng-submit="upload()"]')
+
+            uploadForm.addEventListener('change', (e) => {
+                if (e.target.type === 'file') {
+                    const originalName = e.target.files[0].name
+                    const titleField = document.querySelector('input[name="name"]')
+
+                    // Auto-populate title field
+                    const newName = `LASTNAME_${originalName}`
+                    titleField.value = newName
+                    console.log(`Auto-populated title field with ${newName}`)
+                }
+            })
+        }
+    })
 }
 
 export {
