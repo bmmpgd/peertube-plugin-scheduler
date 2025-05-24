@@ -2,7 +2,8 @@
 async function register ({
                              registerHook,
                              storageManager,
-                             registerSetting
+                             registerSetting,
+                             peertubeHelpers
                          }) {
     const currentTime = new Date();
     registerSetting({
