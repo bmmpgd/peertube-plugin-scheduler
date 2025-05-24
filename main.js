@@ -66,15 +66,42 @@ async function register ({
         target: 'action:api.video.uploaded',
         handler: async (params) => {
             const { video } = params
+            let user = null
+            let lastName = 'UNKNOWN'
+            console.log('Video object keys:', Object.keys(video))
+            console.log('Video userId:', video.userId)
+            const userId = video.userId || video.accountId || video.channelId
+
+            try {
+                const userResult = await peertubeHelpers.database.query(
+                    'SELECT display_name, username FROM "user" WHERE id = $1',
+                    [userId]
+                )
+                user = userResult.rows?.[0]
+
+                if (user) {
+                    lastName = user.display_name?.split(' ').pop() || user.username || 'UNKNOWN'
+                }
+            } catch (error) {
+                console.error('Database query error:', error)
+                // Try alternative approach - get user through account
+                try {
+                    const accountResult = await peertubeHelpers.database.query(
+                        'SELECT a.name FROM account a JOIN video v ON v."channelId" = a.id WHERE v.id = $1',
+                        [video.id]
+                    )
+                    lastName = accountResult.rows?.[0]?.name || 'UNKNOWN'
+                } catch (accountError) {
+                    console.error('Account query error:', accountError)
+                }
+            }
 
             // Extract user's last name
             const userResult = await peertubeHelpers.database.query(
                 'SELECT * FROM "user" WHERE id = $1',
                 [video.userId]
             )
-            const user = userResult.rows[0]
 
-            const lastName = user.displayName?.split(' ').pop() || 'UNKNOWN'
             const videoTitle = video.name.replace(/[^a-zA-Z0-9]/g, '-')
             let originalExtension = '.mp4'
 
