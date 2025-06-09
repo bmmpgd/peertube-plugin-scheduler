@@ -86,6 +86,19 @@ async function register ({ registerHook, peertubeHelpers, registerVideoField }) 
             })
         }
     })
+    registerHook({
+        target: 'action:video-watch.player.loaded',
+        handler: (video) => {
+            if (now < new Date(settings['screening-close-time'])) {
+                peertubeHelpers.showModal({
+                    title: 'SCREENINGS CURRENTLY SHOWING.',
+                    content: "This video is currently in the screening scheduled and cannot be viewed until screenings are over. " +
+                        "Current screening schedule ends: " + new Date(settings['screening-close-time']).toLocaleString()  + ".",
+                    confirm: { value: 'confirm', action: () => {window.location.href = "http://localhost:9000";} },
+                })
+            }
+        }
+        })
 }
 
 export {

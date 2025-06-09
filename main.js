@@ -6,6 +6,16 @@ async function register ({
                              peertubeHelpers
                          }) {
     const currentTime = new Date();
+
+    registerSetting({
+        name: 'current-term',
+        label: 'The current academic term of submissions.',
+        type: 'input',
+        default: false,
+        private: false,
+        descriptionHTML: 'Screening submissions will be closed at this date-time.'
+    })
+
     registerSetting({
         name: 'open-time',
         label: 'Opening time for screening submissions',
@@ -13,7 +23,7 @@ async function register ({
         default: '',
         private: false,
         descriptionHTML: `
-            <small style="color: #666;">Select a future date and time for publishing</small>
+            <small style="color: #666;">Select a date and time to start screening submissions.</small>
             <script>
               setTimeout(function() {
                 const originalInput = document.querySelector('input[name="open-time"]');
@@ -41,7 +51,7 @@ async function register ({
         default: currentTime,
         private: false,
         descriptionHTML: `
-            <small style="color: #666;">Select a future date and time for publishing</small>
+            <small style="color: #666;">Select a date and time to end submission window.</small>
             <script>
               setTimeout(function() {
                 const originalInput = document.querySelector('input[name="close-time"]');
@@ -50,6 +60,60 @@ async function register ({
                   const datetimeInput = document.createElement('input');
                   datetimeInput.type = 'datetime-local';
                   datetimeInput.name = 'close-time';
+                  datetimeInput.min = new Date().toISOString().slice(0, 16);
+                  datetimeInput.style.cssText = 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;';
+                  datetimeInput.value = originalInput.value || '';
+
+                  // Replace the original input
+                  originalInput.parentNode.replaceChild(datetimeInput, originalInput);
+                }
+              }, 1000);
+            </script>
+        `
+    })
+    registerSetting({
+        name: 'screening-start-time',
+        label: 'Start datetime of screening schedule.',
+        type: 'input',
+        default: currentTime,
+        private: false,
+        descriptionHTML: `
+            <small style="color: #666;">Select a date and time that screenings will start showing.</small>
+            <script>
+              setTimeout(function() {
+                const originalInput = document.querySelector('input[name="screening-start-time"]');
+                if (originalInput) {
+                  // Create new datetime input
+                  const datetimeInput = document.createElement('input');
+                  datetimeInput.type = 'datetime-local';
+                  datetimeInput.name = 'screening-start-time';
+                  datetimeInput.min = new Date().toISOString().slice(0, 16);
+                  datetimeInput.style.cssText = 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;';
+                  datetimeInput.value = originalInput.value || '';
+
+                  // Replace the original input
+                  originalInput.parentNode.replaceChild(datetimeInput, originalInput);
+                }
+              }, 1000);
+            </script>
+        `
+    })
+    registerSetting({
+        name: 'screening-close-time',
+        label: 'End datetime of screenings schedule.',
+        type: 'input',
+        default: currentTime,
+        private: false,
+        descriptionHTML: `
+            <small style="color: #666;">Select a date and time that screenings will end.</small>
+            <script>
+              setTimeout(function() {
+                const originalInput = document.querySelector('input[name="screening-close-time"]');
+                if (originalInput) {
+                  // Create new datetime input
+                  const datetimeInput = document.createElement('input');
+                  datetimeInput.type = 'datetime-local';
+                  datetimeInput.name = 'screening-close-time';
                   datetimeInput.min = new Date().toISOString().slice(0, 16);
                   datetimeInput.style.cssText = 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;';
                   datetimeInput.value = originalInput.value || '';
